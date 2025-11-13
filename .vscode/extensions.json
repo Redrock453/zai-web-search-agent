@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.black-formatter",
+    "ms-python.debugpy",
+    "ms-toolsai.jupyter",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml",
+    "esbenp.prettier-vscode",
+    "streetsidesoftware.code-spell-checker",
+    "eamodio.gitlens",
+    "donjayamanne.githistory",
+    "github.copilot",
+    "github.copilot-chat"
+  ]
+}

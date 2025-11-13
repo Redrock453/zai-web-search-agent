@@ -1,0 +1,116 @@
+# Пример интеграции с Kilo Code
+# =================================
+
+# Этот YAML файл показывает, как настроить Z.AI Search Agent
+# для использования в проекте Kilo Code
+
+# API настройки
+api:
+  # Ваш API ключ (используйте переменную окружения для безопасности)
+  api_key: ${ZAI_API_KEY}
+  
+  # URL API
+  base_url: "https://api.z.ai/v1"
+  
+  # Тайм-аут в секундах
+  timeout: 30
+  
+  # Количество повторных попыток при ошибках
+  max_retries: 3
+
+# Настройки повторных попыток
+retry:
+  initial_backoff: 1.0
+  max_backoff: 60.0
+  backoff_multiplier: 2.0
+
+# Ограничение скорости запросов
+rate_limit:
+  requests: 100  # Максимум запросов
+  window: 60     # За 60 секунд
+
+# Настройки поиска по умолчанию
+search_defaults:
+  num_results: 10
+  language: "ru"
+  region: "RU"
+  safe_search: "moderate"
+  search_type: "web"
+
+# ===== НАСТРОЙКИ ДЛЯ KILO CODE =====
+kilo_code:
+  # Включить интеграцию
+  enabled: true
+  
+  # Порт для REST API сервера
+  api_port: 5000
+  
+  # Хост (0.0.0.0 = доступен со всех интерфейсов)
+  api_host: "0.0.0.0"
+  
+  # CORS для веб-интеграции
+  enable_cors: true
+  
+  # Режим отладки
+  debug: false
+  
+  # Формат ответа: json, dict, или object
+  response_format: "json"
+
+# Логирование
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  log_requests: true
+  log_responses: false
+
+# Профили для разных окружений
+profiles:
+  # Разработка
+  development:
+    api:
+      timeout: 15
+      max_retries: 1
+    rate_limit:
+      requests: 10
+      window: 60
+    logging:
+      level: "DEBUG"
+      log_requests: true
+      log_responses: true
+    kilo_code:
+      debug: true
+  
+  # Продакшен
+  production:
+    api:
+      timeout: 45
+      max_retries: 5
+    rate_limit:
+      requests: 100
+      window: 60
+    logging:
+      level: "WARNING"
+      log_requests: false
+      log_responses: false
+    kilo_code:
+      debug: false
+
+# Использование:
+# 
+# 1. Установите переменную окружения:
+#    export ZAI_API_KEY="ваш_api_ключ"
+#
+# 2. В Python коде:
+#    from integrations.yaml_loader import load_agent_from_yaml
+#    agent = load_agent_from_yaml('config/kilo_code.yaml')
+#    results = agent.search("Python")
+#
+# 3. С профилем:
+#    agent = load_agent_from_yaml('config/kilo_code.yaml', profile='production')
+#
+# 4. Через REST API:
+#    python integrations/kilo_code_api.py
+#    curl -X POST http://localhost:5000/api/search \
+#         -H "Content-Type: application/json" \
+#         -d '{"query": "Python", "num_results": 5}'

@@ -1,0 +1,88 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Z.AI Search Agent",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "${workspaceFolder}/integrations/kilo_code_api.py"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "isBackground": true,
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Test Search Agent",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "-m",
+        "pytest",
+        "tests/",
+        "-v"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Run Kilo Code Examples",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "${workspaceFolder}/examples/kilo_code_example.py"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Quick Search (Interactive)",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "-c",
+        "from integrations import quick_search, init_search; import sys; init_search(); query = input('Поисковый запрос: '); results = quick_search(query, num_results=5); print('\\n=== Результаты ===\\n'); [print(f\"{i+1}. {r['title']}\\n   {r['url']}\\n\") for i, r in enumerate(results['results'])]"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "Install Dependencies",
+      "type": "shell",
+      "command": "pip",
+      "args": [
+        "install",
+        "-r",
+        "${workspaceFolder}/requirements.txt",
+        "-r",
+        "${workspaceFolder}/requirements-yaml.txt"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}

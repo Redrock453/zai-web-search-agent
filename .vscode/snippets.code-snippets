@@ -1,0 +1,102 @@
+{
+  "Z.AI Quick Search": {
+    "prefix": "zai-search",
+    "body": [
+      "from integrations import quick_search",
+      "",
+      "results = quick_search(\"${1:query}\", num_results=${2:5})",
+      "for result in results['results']:",
+      "    print(f\"{result['title']} - {result['url']}\")"
+    ],
+    "description": "Quick Z.AI search snippet"
+  },
+  "Z.AI Agent from YAML": {
+    "prefix": "zai-yaml",
+    "body": [
+      "from integrations.yaml_loader import load_agent_from_yaml",
+      "",
+      "agent = load_agent_from_yaml('config/${1:kilo_code}.yaml'${2:, profile='${3:development}'})",
+      "response = agent.search(\"${4:query}\", num_results=${5:10})",
+      "",
+      "for result in response.results:",
+      "    print(f\"{result.title} - {result.url}\")"
+    ],
+    "description": "Load agent from YAML configuration"
+  },
+  "Z.AI Integration": {
+    "prefix": "zai-integration",
+    "body": [
+      "from integrations import KiloSearchIntegration",
+      "",
+      "search = KiloSearchIntegration()",
+      "",
+      "if search.is_ready():",
+      "    response = search.search(\"${1:query}\", num_results=${2:10})",
+      "    ",
+      "    if response.status == 'success':",
+      "        for result in response.results:",
+      "            print(f\"{result.title} - {result.url}\")",
+      "    else:",
+      "        print(f\"Error: {response.error_message}\")",
+      "else:",
+      "    print(f\"Initialization error: {search.get_error()}\")"
+    ],
+    "description": "Kilo Code integration snippet"
+  },
+  "Z.AI Batch Search": {
+    "prefix": "zai-batch",
+    "body": [
+      "from integrations import KiloSearchIntegration",
+      "",
+      "search = KiloSearchIntegration()",
+      "queries = [${1:\"query1\", \"query2\", \"query3\"}]",
+      "",
+      "results = search.search_multiple(queries, num_results=${2:5})",
+      "",
+      "for response in results:",
+      "    print(f\"\\nQuery: {response.query}\")",
+      "    print(f\"Results: {len(response.results)}\")",
+      "    for result in response.results[:${3:3}]:",
+      "        print(f\"  - {result.title}\")"
+    ],
+    "description": "Batch search snippet"
+  },
+  "Z.AI Config Loader": {
+    "prefix": "zai-config",
+    "body": [
+      "from integrations.yaml_loader import YAMLConfigLoader",
+      "",
+      "loader = YAMLConfigLoader('config/${1:agent}.yaml')",
+      "config = loader.load(${2:profile='${3:development}'})",
+      "",
+      "# Access configuration",
+      "timeout = loader.get('api.timeout')",
+      "language = loader.get('search_defaults.language')",
+      "",
+      "# Create agent",
+      "agent = loader.create_agent()"
+    ],
+    "description": "YAML config loader snippet"
+  },
+  "Z.AI Test Template": {
+    "prefix": "zai-test",
+    "body": [
+      "import pytest",
+      "from integrations import ${1:KiloSearchIntegration}",
+      "",
+      "",
+      "def test_${2:search_functionality}():",
+      "    \"\"\"Test ${3:description}\"\"\"",
+      "    # Arrange",
+      "    ${4:search = KiloSearchIntegration()}",
+      "    ",
+      "    # Act",
+      "    ${5:response = search.search(\"test query\", num_results=5)}",
+      "    ",
+      "    # Assert",
+      "    ${6:assert response.status == 'success'}",
+      "    ${7:assert len(response.results) > 0}"
+    ],
+    "description": "Test template for Z.AI agent"
+  }
+}

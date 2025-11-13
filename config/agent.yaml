@@ -1,0 +1,228 @@
+# Z.AI Web Search Agent Configuration
+# ====================================
+# 
+# Этот файл содержит конфигурацию для Z.AI Web Search Agent.
+# Используйте этот файл для настройки агента без изменения кода.
+
+# Основные настройки API
+api:
+  # API ключ (или используйте переменную окружения ZAI_API_KEY)
+  api_key: ${ZAI_API_KEY}
+  
+  # Базовый URL API
+  base_url: "https://api.z.ai/v1"
+  
+  # Тайм-аут запросов (секунды)
+  timeout: 30
+  
+  # Максимальное количество попыток при ошибках
+  max_retries: 3
+
+# Настройки повторных попыток
+retry:
+  # Начальная задержка перед повторной попыткой (секунды)
+  initial_backoff: 1.0
+  
+  # Максимальная задержка между попытками (секунды)
+  max_backoff: 60.0
+  
+  # Множитель для экспоненциального роста задержки
+  backoff_multiplier: 2.0
+
+# Настройки ограничения скорости (Rate Limiting)
+rate_limit:
+  # Максимальное количество запросов в окне времени
+  requests: 100
+  
+  # Окно времени для ограничения (секунды)
+  window: 60
+
+# Настройки поиска по умолчанию
+search_defaults:
+  # Количество результатов по умолчанию
+  num_results: 10
+  
+  # Язык поиска по умолчанию
+  language: "ru"
+  
+  # Регион поиска по умолчанию
+  region: "RU"
+  
+  # Уровень безопасного поиска (off, moderate, strict)
+  safe_search: "moderate"
+  
+  # Тип поиска по умолчанию (web, images, news, videos)
+  search_type: "web"
+
+# Настройки для Kilo Code интеграции
+kilo_code:
+  # Включить интеграцию с Kilo Code
+  enabled: true
+  
+  # Порт для REST API сервера
+  api_port: 5000
+  
+  # Хост для REST API сервера
+  api_host: "0.0.0.0"
+  
+  # Включить CORS для веб-интеграции
+  enable_cors: true
+  
+  # Режим отладки
+  debug: false
+  
+  # Формат ответа по умолчанию (json, dict, object)
+  response_format: "json"
+
+# Настройки логирования
+logging:
+  # Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  level: "INFO"
+  
+  # Формат логов
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # Файл для логов (оставьте пустым для вывода в консоль)
+  file: ""
+  
+  # Включить логирование запросов
+  log_requests: true
+  
+  # Включить логирование ответов
+  log_responses: false
+
+# Настройки кэширования (опционально)
+cache:
+  # Включить кэширование результатов
+  enabled: false
+  
+  # Время жизни кэша (секунды)
+  ttl: 3600
+  
+  # Максимальный размер кэша (количество запросов)
+  max_size: 1000
+  
+  # Путь к файлу кэша
+  cache_file: ".cache/search_cache.json"
+
+# Фильтры по умолчанию
+filters:
+  # Домены для включения (пусто = все)
+  include_domains: []
+  
+  # Домены для исключения
+  exclude_domains: []
+  
+  # Минимальный рейтинг достоверности (0.0 - 1.0)
+  min_credibility: 0.0
+
+# Профили конфигурации для разных сред
+profiles:
+  # Профиль разработки
+  development:
+    api:
+      timeout: 15
+      max_retries: 1
+    rate_limit:
+      requests: 10
+      window: 60
+    logging:
+      level: "DEBUG"
+      log_requests: true
+      log_responses: true
+    kilo_code:
+      debug: true
+  
+  # Профиль staging
+  staging:
+    api:
+      timeout: 30
+      max_retries: 3
+    rate_limit:
+      requests: 50
+      window: 60
+    logging:
+      level: "INFO"
+    kilo_code:
+      debug: false
+  
+  # Профиль production
+  production:
+    api:
+      timeout: 45
+      max_retries: 5
+    rate_limit:
+      requests: 100
+      window: 60
+    logging:
+      level: "WARNING"
+      log_requests: false
+      log_responses: false
+    kilo_code:
+      debug: false
+
+# Расширенные настройки
+advanced:
+  # Использовать пул соединений
+  use_connection_pool: true
+  
+  # Размер пула соединений
+  pool_size: 10
+  
+  # Максимальное время ожидания соединения
+  pool_timeout: 5.0
+  
+  # Включить сжатие gzip
+  enable_compression: true
+  
+  # User-Agent для запросов
+  user_agent: "Z.AI-WebSearch-Agent/1.0"
+
+# Настройки для конкретных типов поиска
+search_types:
+  web:
+    num_results: 10
+    language: "ru"
+  
+  images:
+    num_results: 20
+    safe_search: "strict"
+  
+  news:
+    num_results: 15
+    language: "ru"
+    region: "RU"
+  
+  videos:
+    num_results: 10
+    language: "ru"
+
+# Webhooks (опционально)
+webhooks:
+  # Включить webhooks
+  enabled: false
+  
+  # URL для отправки событий
+  url: ""
+  
+  # События для отправки (search_complete, error, rate_limit)
+  events:
+    - "search_complete"
+    - "error"
+
+# Мониторинг и метрики
+monitoring:
+  # Включить сбор метрик
+  enabled: false
+  
+  # Путь для экспорта метрик
+  metrics_path: "/metrics"
+  
+  # Порт для метрик (Prometheus)
+  metrics_port: 9090
+
+# Примечания:
+# - Переменные окружения имеют приоритет над значениями из файла
+# - Используйте ${VAR_NAME} для подстановки переменных окружения
+# - Профили можно активировать через переменную AGENT_PROFILE
+# - Все пути могут быть абсолютными или относительными
