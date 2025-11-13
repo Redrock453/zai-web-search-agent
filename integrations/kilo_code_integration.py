@@ -96,8 +96,7 @@ class KiloSearchIntegration:
         self,
         api_key: Optional[str] = None,
         config: Optional[ZAIConfig] = None,
-        max_retries: int = 3,
-        timeout: float = 30.0
+        max_retries: int = 3
     ):
         """
         Инициализация интеграции
@@ -106,7 +105,6 @@ class KiloSearchIntegration:
             api_key: API ключ Z.AI (если не указан, берётся из .env)
             config: Конфигурация Z.AI (опционально)
             max_retries: Максимальное количество повторных попыток
-            timeout: Тайм-аут запросов в секундах
         """
         try:
             if config is None:
@@ -117,8 +115,7 @@ class KiloSearchIntegration:
             
             self.agent = WebSearchAgent(
                 config=config,
-                max_retries=max_retries,
-                timeout=timeout
+                max_retries=max_retries
             )
             self._initialized = True
             

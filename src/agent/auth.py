@@ -16,8 +16,8 @@ class ZAIAuthenticator:
     generate authorization headers, and validate API key format.
     """
     
-    # Regular expression for validating API key format
-    API_KEY_PATTERN: re.Pattern = re.compile(r"^zai_[a-zA-Z0-9]{32}$")
+    # Regular expression for validating API key format (flexible for various providers)
+    API_KEY_PATTERN: re.Pattern = re.compile(r"^[a-zA-Z0-9._-]{20,}$")
     
     def __init__(self, config: Optional[ZAIConfig] = None, api_key: Optional[str] = None):
         """
@@ -59,7 +59,7 @@ class ZAIAuthenticator:
         
         if not self.API_KEY_PATTERN.match(api_key):
             raise ZAIInvalidRequestError(
-                f"Invalid API key format. Expected pattern: {self.API_KEY_PATTERN.pattern}"
+                f"Invalid API key format. Must be at least 20 characters with alphanumeric, dots, underscores, or hyphens"
             )
     
     def get_auth_headers(self) -> Dict[str, str]:

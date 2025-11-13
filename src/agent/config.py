@@ -6,7 +6,8 @@ import os
 import re
 from typing import Optional, ClassVar
 from dotenv import load_dotenv
-from pydantic import BaseSettings, Field, validator
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings
 
 
 class ZAIConfig(BaseSettings):
@@ -25,15 +26,18 @@ class ZAIConfig(BaseSettings):
     timeout: int = Field(default=30, description="Request timeout in seconds")
     max_retries: int = Field(default=3, description="Maximum number of retries for failed requests")
     
-    # Regular expression for validating API key format
-    API_KEY_PATTERN: ClassVar[re.Pattern] = re.compile(r"^zai_[a-zA-Z0-9]{32}$")
+    # Regular expression for validating API key format (flexible for various providers)
+    API_KEY_PATTERN: ClassVar[re.Pattern] = re.compile(r"^[a-zA-Z0-9._-]{20,}$")
     
-    class Config:
-        env_prefix = "ZAI_"
-        env_file = ".env"
-        case_sensitive = False
+    model_config = {
+        "env_prefix": "ZAI_",
+        "env_file": ".env",
+        "case_sensitive": False,
+        "extra": "ignore",
+    }
     
-    @validator("api_key")
+    @field_validator("api_key")
+    @classmethod
     def validate_api_key(cls, v: str) -> str:
         """
         Validate the API key format.
@@ -52,12 +56,13 @@ class ZAIConfig(BaseSettings):
         
         if not cls.API_KEY_PATTERN.match(v):
             raise ValueError(
-                f"Invalid API key format. Expected pattern: {cls.API_KEY_PATTERN.pattern}"
+                f"Invalid API key format. Must be at least 20 characters with alphanumeric, dots, underscores, or hyphens"
             )
         
         return v
     
-    @validator("timeout")
+    @field_validator("timeout")
+    @classmethod
     def validate_timeout(cls, v: int) -> int:
         """
         Validate the timeout value.
@@ -75,7 +80,8 @@ class ZAIConfig(BaseSettings):
             raise ValueError("Timeout must be a positive integer")
         return v
     
-    @validator("max_retries")
+    @field_validator("max_retries")
+    @classmethod
     def validate_max_retries(cls, v: int) -> int:
         """
         Validate the max_retries value.

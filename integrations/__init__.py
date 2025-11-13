@@ -2,13 +2,12 @@
 Модули интеграции Z.AI Web Search Agent
 """
 
-from .kilo_code_integration import (
+from .kilo_code_sdk import (
     KiloSearchIntegration,
     KiloSearchResult,
     KiloSearchResponse,
     init_search,
-    quick_search,
-    search_json
+    quick_search
 )
 
 from .yaml_loader import (
@@ -18,16 +17,16 @@ from .yaml_loader import (
 )
 
 __all__ = [
-    # Kilo Code интеграция
+    # Kilo Code интеграция (SDK)
     'KiloSearchIntegration',
     'KiloSearchResult',
     'KiloSearchResponse',
     'init_search',
     'quick_search',
-    'search_json',
     
     # YAML загрузчик
     'YAMLConfigLoader',
     'load_agent_from_yaml',
     'load_config_from_yaml',
 ]
+
